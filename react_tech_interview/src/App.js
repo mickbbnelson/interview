@@ -23,7 +23,7 @@ class App extends React.Component {
   state = {
     title: '',
     description: '',
-    tasks: [{id: uuid(), title: "shya", description: "right"}],
+    tasks: [],
     inProgress: [],
     done: []
   }
@@ -31,6 +31,10 @@ class App extends React.Component {
   newTask = (e) => {
     e.preventDefault();
     this.addReadyTasks(uuid(), this.state.title, this.state.description)
+    this.setState({
+      title: '',
+      description: ''
+    })
   }
 
    showTask = (item) => {
@@ -80,11 +84,13 @@ class App extends React.Component {
     this.setState({
       tasks: this.state.tasks.filter((task) => task.id !== item.id),
       inProgress: [...this.state.inProgress, item]
-    })} else {
+    })} else if (this.state.inProgress.includes(item)) {
       this.setState({
         inProgress: this.state.inProgress.filter((task) => task.id !== item.id),
         done: [...this.state.done, item]
       })
+    } else {
+      return this.state
     }
   }
 
@@ -93,11 +99,13 @@ class App extends React.Component {
     this.setState({
       done: this.state.done.filter((task) => task.id !== item.id),
       inProgress: [...this.state.inProgress, item]
-    })} else {
+    })} else if (this.state.inProgress.includes(item)) {
       this.setState({
         inProgress: this.state.inProgress.filter((task) => task.id !== item.id),
         tasks: [...this.state.tasks, item]
       })
+    } else {
+      return this.state
     }
   }
   
